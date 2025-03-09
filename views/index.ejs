@@ -10,13 +10,71 @@
     <div class="container text-center mt-5">
         <h1>¡Bienvenido a mi aplicación con Express y EJS!</h1>
         <button class="btn btn-primary" onclick="mostrarAlerta()">Haz clic</button>
+
+        <!-- 📌 Sección de Geolocalización -->
+        <div class="mt-4">
+            <h3>Tu ubicación:</h3>
+            <p id="ubicacion">Presiona el botón para obtener tu ubicación</p>
+            <button class="btn btn-success" onclick="obtenerUbicacion()">Obtener ubicación</button>
+        </div>
+
+        <!-- 📌 Sección de Multimedia -->
+        <div class="mt-4">
+            <h3>Video de prueba</h3>
+            <video width="320" height="240" controls>
+                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                Tu navegador no soporta el video.
+            </video>
+
+            <h3 class="mt-3">Audio de prueba</h3>
+            <audio controls>
+                <source src="https://www.w3schools.com/html/horse.ogg" type="audio/ogg">
+                Tu navegador no soporta el audio.
+            </audio>
+        </div>
+
+        <!-- 📌 Sección de Petición HTTP -->
+        <div class="mt-4">
+            <h3>Datos desde API</h3>
+            <p id="datos-api">Cargando datos...</p>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // 📌 SweetAlert2
         function mostrarAlerta() {
             Swal.fire('¡Express y SweetAlert funcionando correctamente!');
         }
+
+        // 📌 Geolocalización
+        function obtenerUbicacion() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    document.getElementById("ubicacion").innerText = 
+                        `Latitud: ${position.coords.latitude}, Longitud: ${position.coords.longitude}`;
+                }, () => {
+                    document.getElementById("ubicacion").innerText = "No se pudo obtener la ubicación.";
+                });
+            } else {
+                document.getElementById("ubicacion").innerText = "Geolocalización no soportada en este navegador.";
+            }
+        }
+
+        // 📌 Petición HTTP con Fetch
+        fetch('https://jsonplaceholder.typicode.com/posts/1')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("datos-api").innerText = `Título: ${data.title}`;
+            })
+            .catch(error => {
+                document.getElementById("datos-api").innerText = "Error al obtener datos.";
+                console.error(error);
+            });
+
+        // 📌 Almacenamiento Local
+        localStorage.setItem("usuario", "Carlos");
+        console.log("Usuario almacenado:", localStorage.getItem("usuario"));
     </script>
 </body>
 </html>
