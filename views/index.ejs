@@ -47,7 +47,6 @@
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        // Cargar GeoJSON
         fetch('/data/monumentos')
             .then(response => response.json())
             .then(data => {
@@ -60,7 +59,7 @@
 
                     let marker = L.marker([coords[1], coords[0]], {
                         icon: L.icon({
-                            iconUrl: '/images/location.png',
+                            iconUrl: '/images/studio.png',
                             iconSize: [30, 30]
                         })
                     }).addTo(map).bindPopup(`<h5>${nombre}</h5><p>${descripcion}</p>`);
