@@ -37,6 +37,7 @@
                 <div id="map"></div>
             </div>
             <div class="col-md-4 sidebar">
+                <h3 class="text-center">Monumentos</h3>
                 <ul id="lista-monumentos" class="list-group"></ul>
             </div>
         </div>
@@ -55,7 +56,7 @@
         fetch('/data/monumentos')
             .then(response => response.json())
             .then(data => {
-                console.log("Datos cargados:", data); 
+                console.log("Datos cargados:", data);
 
                 data.features.forEach(monumento => {
                     let coords = monumento.geometry.coordinates;
@@ -69,7 +70,7 @@
                         })
                     }).addTo(map);
 
-                    marker.on("click", () => {
+                    function mostrarPopup() {
                         Swal.fire({
                             title: nombre,
                             html: `
@@ -80,14 +81,16 @@
                             `,
                             confirmButtonText: "OK"
                         });
-                    });
+                    }
+
+                    marker.on("click", mostrarPopup);
 
                     let item = document.createElement("li");
                     item.className = "list-group-item monumento-item";
                     item.innerText = nombre;
                     item.onclick = () => {
                         map.setView([coords[1], coords[0]], 15);
-                        marker.openPopup();
+                        mostrarPopup();
                     };
                     document.getElementById("lista-monumentos").appendChild(item);
                 });
