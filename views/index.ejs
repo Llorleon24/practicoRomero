@@ -20,6 +20,14 @@
         .monumento-item:hover {
             background-color: #f8f9fa;
         }
+        .popup-content {
+            text-align: center;
+        }
+        .popup-image {
+            width: 100px;
+            height: auto;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -28,7 +36,6 @@
             <div class="col-md-8">
                 <div id="map"></div>
             </div>
-
             <div class="col-md-4 sidebar">
                 <ul id="lista-monumentos" class="list-group"></ul>
             </div>
@@ -40,7 +47,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        let map = L.map('map').setView([36.7213, -4.4212], 13); 
+        let map = L.map('map').setView([36.7213, -4.4212], 13);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
@@ -48,7 +55,7 @@
         fetch('/data/monumentos')
             .then(response => response.json())
             .then(data => {
-                console.log("Datos cargados:", data);
+                console.log("Datos cargados:", data); 
 
                 data.features.forEach(monumento => {
                     let coords = monumento.geometry.coordinates;
@@ -60,7 +67,20 @@
                             iconUrl: '/images/studio.png',
                             iconSize: [30, 30]
                         })
-                    }).addTo(map).bindPopup(`<h5>${nombre}</h5><p>${descripcion}</p>`);
+                    }).addTo(map);
+
+                    marker.on("click", () => {
+                        Swal.fire({
+                            title: nombre,
+                            html: `
+                                <div class="popup-content">
+                                    <img src="/images/studio.png" alt="Imagen del monumento" class="popup-image">
+                                    <p>${descripcion}</p>
+                                </div>
+                            `,
+                            confirmButtonText: "OK"
+                        });
+                    });
 
                     let item = document.createElement("li");
                     item.className = "list-group-item monumento-item";
